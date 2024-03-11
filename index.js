@@ -1,3 +1,15 @@
+// Import required modules
+const express = require('express');
+const axios = require('axios');
+
+// Create an Express application
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// Middleware to parse JSON request bodies
+app.use(express.json());
+
+// Define the route for handling POST requests
 app.post('/apikey', async (req, res) => {
     try {
         const { key, url } = req.query;
@@ -20,4 +32,9 @@ app.post('/apikey', async (req, res) => {
         console.error('Error:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+});
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
