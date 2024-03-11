@@ -32,8 +32,8 @@ app.get('/apikey', async (req, res) => {
         // Extract the MP4 link from the response
         const mp4Link = response.data.result.url;
 
-        // Return only the MP4 link as the response
-        res.json({ mp4Link: mp4Link });
+        // Return the response with creator name and MP4 link
+        res.json({ creator: 'Nafis', mp4Link: mp4Link });
     } catch (error) {
         console.error('Error:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
