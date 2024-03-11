@@ -6,11 +6,11 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Middleware to parse JSON request bodies
-app.use(express.json());
+// Middleware to parse query parameters
+app.use(express.urlencoded({ extended: true }));
 
-// Define the route for handling POST requests
-app.post('/apikey', async (req, res) => {
+// Define the route for handling GET requests
+app.get('/apikey', async (req, res) => {
     try {
         const { key, url } = req.query;
 
@@ -18,6 +18,7 @@ app.post('/apikey', async (req, res) => {
             return res.status(403).json({ error: 'Invalid API key' });
         }
 
+        // Make a request to the external API using Axios
         const response = await axios.post('https://all-video-downloader1.p.rapidapi.com/xnxx', {
             urlXNXX: url
         }, {
@@ -27,16 +28,13 @@ app.post('/apikey', async (req, res) => {
                 'X-RapidAPI-Host': 'all-video-downloader1.p.rapidapi.com'
             }
         });
+
+        // Return the response from the external API
         res.json(response.data);
     } catch (error) {
         console.error('Error:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-});
-
-// Define the route for handling GET requests
-app.get('/apikey', (req, res) => {
-    res.status(405).send('GET method is not allowed for /apikey');
 });
 
 // Start the server
