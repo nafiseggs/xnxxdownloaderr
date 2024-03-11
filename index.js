@@ -1,14 +1,11 @@
-const express = require('express');
-const axios = require('axios');
-
-const app = express();
-const PORT = process.env.PORT || 4000;
-
-app.use(express.json());
-
 app.post('/apikey', async (req, res) => {
     try {
-        const { url } = req.body;
+        const { key, url } = req.query;
+
+        if (key !== 'nafis') {
+            return res.status(403).json({ error: 'Invalid API key' });
+        }
+
         const response = await axios.post('https://all-video-downloader1.p.rapidapi.com/xnxx', {
             urlXNXX: url
         }, {
@@ -23,8 +20,4 @@ app.post('/apikey', async (req, res) => {
         console.error('Error:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
 });
