@@ -18,18 +18,11 @@ app.get('/apikey', async (req, res) => {
             }
         });
 
-        // Extract the required information from the response
-        const creator = "Nafis";
+        // Extract the MP4 link from the response
         const mp4Link = response.data.result.url;
 
-        // Construct the simplified response object
-        const simplifiedResponse = {
-            creator: creator,
-            mp4Link: mp4Link
-        };
-
-        // Return the simplified response to the client
-        res.json(simplifiedResponse);
+        // Return only the MP4 link as the response
+        res.json({ mp4Link: mp4Link });
     } catch (error) {
         console.error('Error:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
