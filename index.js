@@ -1,14 +1,3 @@
-// Import required modules
-const express = require('express');
-const axios = require('axios');
-
-// Create an Express application
-const app = express();
-const PORT = process.env.PORT || 4000;
-
-// Middleware to parse query parameters
-app.use(express.urlencoded({ extended: true }));
-
 // Define the route for handling GET requests
 app.get('/apikey', async (req, res) => {
     try {
@@ -29,15 +18,20 @@ app.get('/apikey', async (req, res) => {
             }
         });
 
-        // Return the response from the external API
-        res.json(response.data);
+        // Extract the required information from the response
+        const creator = "Nafis";
+        const mp4Link = response.data.result.url;
+
+        // Construct the simplified response object
+        const simplifiedResponse = {
+            creator: creator,
+            mp4Link: mp4Link
+        };
+
+        // Return the simplified response to the client
+        res.json(simplifiedResponse);
     } catch (error) {
         console.error('Error:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-});
-
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
 });
