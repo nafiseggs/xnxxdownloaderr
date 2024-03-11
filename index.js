@@ -34,6 +34,11 @@ app.post('/apikey', async (req, res) => {
     }
 });
 
+// Define the route for handling GET requests
+app.get('/apikey', (req, res) => {
+    res.status(405).send('GET method is not allowed for /apikey');
+});
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
