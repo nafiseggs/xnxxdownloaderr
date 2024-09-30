@@ -19,22 +19,12 @@ app.get("/test", async(req, res) => {
     const remark = req.query.remarks;
     
     const width = 2480;
-    const originalHeight = 3508;
-    const croppedHeight = (originalHeight / 5) * 3; // Crop to 3/5 of the height
-
-    const canvas = createCanvas(width, croppedHeight);
+    const height = 3508;
+    const canvas = createCanvas(width, height);
     const ctx = canvas.getContext("2d");
 
     let bg = await loadImage("bg2.png");
-    
-    // Crop the image by adjusting the source height and destination height
-    ctx.drawImage(
-        bg,               // The source image
-        0, 0,             // Source X and Y (top-left corner of the image)
-        width, croppedHeight, // Source width and height (we are cropping 3/5 of the height)
-        0, 0,             // Destination X and Y (top-left corner of the canvas)
-        width, croppedHeight  // Destination width and height (same as source width and cropped height)
-    );
+    ctx.drawImage(bg, 0, 0, width, height);
     
     ctx.font = "61px Arial";
     ctx.fillStyle = "#000000";
