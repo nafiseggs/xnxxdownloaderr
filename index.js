@@ -48,10 +48,21 @@ app.get("/test", async(req, res) => {
     // Update the date text with the current date and day name
     ctx.fillText(`Date: ${date} (${dayName})`, 1793, 736);
     
-    const imgBuffer = canvas.toBuffer("image/png");
+    // Now apply cropping to the canvas
+    const cropHeight = (height / 5) * 3; // Cropping to 3/5 of the height
+    const croppedCanvas = createCanvas(width, cropHeight);
+    const croppedCtx = croppedCanvas.getContext('2d');
 
+    // Draw the cropped portion of the original canvas onto the cropped canvas
+    croppedCtx.drawImage(canvas, 0, 0, width, cropHeight, 0, 0, width, cropHeight);
+
+    // Create the image buffer from the cropped canvas
+    const imgBuffer = croppedCanvas.toBuffer("image/png");
+
+    // Save the cropped image to a file
     fs.writeFileSync("test.png", imgBuffer);
 
+    // Send the cropped image as a response
     res.sendFile(path.join(__dirname, "test.png"));
 });
 
