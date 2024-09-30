@@ -12,7 +12,6 @@ app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get("/test", async(req, res) => {
     let cls = req.query.class;
-    const date = req.query.date;
     const subject = req.query.subject;
     const teacher = req.query.teacher;
     const cw = req.query.cw;
@@ -37,12 +36,16 @@ app.get("/test", async(req, res) => {
     ctx.fillText(hw, 264, 1628);
     ctx.fillText(remark, 264, 1860);
     ctx.textAlign = "center";
-    
-    // Parse the date and get the weekday name
-    let [day, month, year] = date.split("-");
-    let dayName = new Date(year, month - 1, day).toLocaleString('en-us', { weekday: 'long' });
 
-    // Update the date text with the day name
+    // Get the current date and day name
+    const currentDate = new Date();
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const year = currentDate.getFullYear();
+    const date = `${day}-${month}-${year}`;
+    const dayName = currentDate.toLocaleString('en-US', { weekday: 'long' });
+
+    // Update the date text with the current date and day name
     ctx.fillText(`Date: ${date} (${dayName})`, 1793, 736);
     
     const imgBuffer = canvas.toBuffer("image/png");
