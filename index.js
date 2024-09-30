@@ -1,46 +1,46 @@
-// Import required modules
-const express = require('express');
-const axios = require('axios');
+const { createCanvas, registerFont, loadImage, Image } = require("canvas");
+const express =  require("express");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const path = require("path");
 
-// Create an Express application
 const app = express();
-const PORT = process.env.PORT || 4000;
+app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({ extended: true }));
 
-// Middleware to parse query parameters
-app.use(express.urlencoded({ extended: true }));
 
-// Define the route for handling GET requests
-app.get('/apikey', async (req, res) => {
-    try {
-        const { key, url } = req.query;
+app.get('/', (req, res) => res.send('Hello World!'));
+app.get("/test", async(req, res) => {
+let cls = req.query.class
+const date = req.query.date;
+const subject = req.query.subject;
+const teacher = req.query.teacher;
+const cw = req.query.cw;
+const hw = req.query.hw;
+const remark = req.query.remarks;
+const width = 2480;
+  const height = 3508;
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+  let bg = await loadImage("bg2.png")
+ctx.drawImage(bg, 0, 0, width, height)
+  ctx.font = "61px Arial";
+  ctx.fillStyle = "#000000";
+  
+  ctx.fillText(cls, 448, 736);
+  ctx.fillText(subject, 498, 867);
+  ctx.fillText(teacher, 691, 994);
+  ctx.fillText(cw, 264, 1220);
+  ctx.fillText(hw, 264, 1628);
+  ctx.fillText(remark, 264, 1860);
+  ctx.textAlign = "center";
+  ctx.fillText(`Date:${date}`, 1793, 736);
+  
+  const imgBuffer = canvas.toBuffer("image/png");
 
-        if (key !== 'nafis') {
-            return res.status(403).json({ error: 'Invalid API key' });
-        }
+  fs.writeFileSync("test.png", imgBuffer);
 
-        // Make a request to the external API using Axios
-        const response = await axios.post('https://all-video-downloader1.p.rapidapi.com/xnxx', {
-            urlXNXX: url
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'X-RapidAPI-Key': 'c430b8ecfbmsh1fb735a97be99a5p198e4bjsnd8ce5972748f',
-                'X-RapidAPI-Host': 'all-video-downloader1.p.rapidapi.com'
-            }
-        });
+  res.sendFile(path.join(__dirname, "test.png"));
 
-        // Extract the MP4 link from the response
-        const mp4Link = response.data.result.url;
-
-        // Return the response with creator name and MP4 link
-        res.json({ creator: 'Nafis', mp4Link: mp4Link });
-    } catch (error) {
-        console.error('Error:', error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+})
+app.listen(3000, () => console.log('Example app listening on port 3000!'));
