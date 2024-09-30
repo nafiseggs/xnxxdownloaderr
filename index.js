@@ -19,7 +19,11 @@ app.get("/test", async(req, res) => {
     const remark = req.query.remarks;
     
     const width = 2480;
-    const height = 3508;
+    let height = 3508;
+
+    // Set canvas height to (height/5)*3
+    height = (height / 5) * 3;
+
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext("2d");
 
